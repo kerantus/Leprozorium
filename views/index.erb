@@ -1,0 +1,13 @@
+<h3>Последние посты</h3>
+</br>
+</br>
+<% @results.each do |value| %>
+
+    <p><%= value["date_create"] %></p>
+    </br>
+    <p><%= value["content"] %></p>
+    </br>
+    </br>
+    </br>
+
+<% end %>
