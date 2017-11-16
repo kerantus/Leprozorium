@@ -5,12 +5,12 @@ require 'sinatra/reloader'
 require 'sqlite3'
 
 def get_db
-	@db = SQLIte3::Database.new (Dir.pwd + '/db/leprozorium.db')
-	@db.redults_as_hash
+	@db = SQLite3::Database.new (Dir.pwd + '/db/leprozorium.db')
+	@db.results_as_hash
 end
 
 before do
-
+  get_db
 end
 
 configure do
