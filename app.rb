@@ -19,6 +19,9 @@ def get_db
   @db.results_as_hash = true
 end
 
+before do
+  get_db
+end
 
 configure do
   get_db
@@ -27,6 +30,14 @@ configure do
   "Id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
   "date_create" DATE,
   "content" TEXT
+  )'
+  @db.execute 'CREATE TABLE IF NOT EXISTS Comments
+  (
+  "Id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
+  "username" TEXT,
+  "useremail" TEXT,
+  "content" TEXT,
+  "postid" INTEGER
   )'
 end
 
@@ -42,7 +53,6 @@ post '/new' do
     @error = 'Введите текст'
     return erb :new
   end
-    get_db
     @db.execute 'INSERT INTO
   "Posts"
   (
@@ -53,12 +63,44 @@ post '/new' do
   (
   datetime(), ?
   )', [@text_new_post]
-    erb "Запись добавлена"
+    redirect '/'
   end
 
 
   get '/' do
-    get_db
     @results = @db.execute 'select * from Posts order by id desc'
     erb :index
   end
+
+
+
+
+get '/details/:post_id' do
+  @post_id = params[:post_id]
+  selected = @db.execute "select * from Posts where Id = #{@post_id}"
+  @row = selected[0]
+  @comment = @db.execute "select * from Comments where postid = #{@post_id.to_s}"
+
+  erb :details
+end
+
+post '/details/:post_id' do
+  post_id = params[:post_id]
+  user_name = params[:user_name]
+  user_email = params[:user_email]
+  user_comment = params[:user_comment]
+
+  @db.execute 'INSERT INTO
+  "Comments"
+  (
+  "postid",
+  "username",
+  "useremail",
+  "content"
+  )
+  VALUES
+  (
+  ?, ?, ?, ?
+  )', [post_id, user_name, user_email, user_comment]
+  redirect "/details/#{post_id}"
+end

@@ -3,10 +3,12 @@
 </br>
 <% @results.each do |value| %>
 
-    <p><%= value["date_create"] %></p>
-    </br>
     <p><%= value["content"] %></p>
     </br>
+    <p><%= value["create_date"] %></p>
+
+    <a href="/details/<%= value["Id"] %>">Подробнее</a>
+
     </br>
     </br>
 
