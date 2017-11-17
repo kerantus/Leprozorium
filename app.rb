@@ -29,6 +29,7 @@ configure do
   (
   "Id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
   "date_create" DATE,
+  "theme" TEXT,
   "content" TEXT
   )'
   @db.execute 'CREATE TABLE IF NOT EXISTS Comments
@@ -48,6 +49,7 @@ end
 
 post '/new' do
   @text_new_post = params[:text_new_post]
+  @theme_new_post = params[:theme_new_post]
   @date_new_post = Date.today
   if @text_new_post.length <= 0
     @error = 'Введите текст'
@@ -57,12 +59,13 @@ post '/new' do
   "Posts"
   (
       "date_create",
+      "theme",
       "content"
   )
   VALUES
   (
-  datetime(), ?
-  )', [@text_new_post]
+  ?, ?, ?
+  )', [@date_new_post.to_s, @theme_new_post, @text_new_post]
     redirect '/'
   end
 
@@ -73,13 +76,19 @@ post '/new' do
   end
 
 
+get '/posts' do
+  @results = @db.execute 'select * from Posts'
+  erb :posts
+end
+
+
 
 
 get '/details/:post_id' do
   @post_id = params[:post_id]
-  selected = @db.execute "select * from Posts where Id = #{@post_id}"
+  selected = @db.execute 'select * from Posts where Id=?',[@post_id]
   @row = selected[0]
-  @comment = @db.execute "select * from Comments where postid = #{@post_id.to_s}"
+  @comment = @db.execute 'select * from Comments where postid=?',[@post_id]
 
   erb :details
 end

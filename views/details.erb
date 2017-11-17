@@ -1,18 +1,12 @@
-<h4>Детали поста</h4>
-
+<h3><%= @row["theme"] %></h3>
 <p><%= @row["content"] %></p>
 <p><%= @row["date_create"] %></p>
 </br>
 
 
-<%= @comment %>
-
 <% @comment.each do |value| %>
 
-    <p><%= value %></p>
-
     <p><%= value["username"] %></p>
-    </br>
     <p><%= value["content"] %></p>
 
     </br>
@@ -29,6 +23,7 @@
     <label for="exampleInputName2">Ваше имя</label>
     <input name="user_name" type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">
   </div>
+  </br>
   <div class="form-inline form-group">
     <label for="exampleInputEmail2">E-mail</label>
     <input name="user_email" type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">

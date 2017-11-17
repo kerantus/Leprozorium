@@ -1,10 +1,5 @@
-<h3>Последние посты</h3>
-</br>
-</br>
 <% @results.each do |value| %>
 
-    <h4><%= value["theme"] %></h4>
-    </br>
     <p><%= value["date_create"] %></p>
     <a href="/details/<%= value["Id"] %>">Подробнее</a>
 
